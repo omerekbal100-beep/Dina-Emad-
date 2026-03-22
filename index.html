@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>يوم مميز لـ دينا 🌟</title>
+    <style>
+        :root { --sky-blue: #87CEEB; --star-yellow: #FFD700; }
+        body { margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--sky-blue); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; position: relative; }
+        
+        .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite linear; }
+        @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1); } }
+
+        .card { background: rgba(255, 255, 255, 0.9); padding: 40px; border-radius: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.15); z-index: 10; width: 85%; max-width: 450px; text-align: center; border: 3px solid white; display: none; }
+        .active-card { display: block; animation: fadeIn 0.8s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { color: #2c3e50; font-size: 24px; line-height: 1.6; margin-bottom: 25px; }
+        .celebrate-h1 { color: #e056fd; font-weight: bold; }
+
+        button { padding: 12px 30px; font-size: 18px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background: #3498db; color: white; margin-top: 20px; }
+        button:hover { background: #2980b9; transform: scale(1.05); }
+
+        /* إخفاء مشغل اليوتيوب */
+        #youtube-audio { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="stars" id="starContainer"></div>
+
+<div id="player"></div>
+
+<div class="card active-card" id="page1">
+    <h1>عارفة إن النهاردة يوم مميز؟ ✨</h1>
+    <button onclick="startExperience()">التالي</button>
+</div>
+
+<div class="card" id="page2">
+    <h1>النهاردة من 20 سنة بالظبط، اتولد حد بيقرا الكلام ده دلوقتي..</h1>
+    <h1>عاوزة تعرفي هو مين؟ 🤔🌟</h1>
+    <button onclick="nextPage(2, 3)">التالي</button>
+</div>
+
+<div class="card" id="page3">
+    <div class="final-msg">
+        <h1 class="celebrate-h1">كنت حابب أقولك كل سنه وانت طيبه يا دينا ❤️🥳 🥰</h1>
+        <h1>و ربنا يجعلها سنه سعيدة عليكي يارب ♥️</h1>
+        <h1>يارب اليوم يكون مميز و سعيد ليكي♥️</h1>
+        <p style="font-size: 18px; color: #57606f;">وحابب أفكرك إن أنا موجود علشانك دايماً.</p>
+    </div>
+</div>
+
+<script>
+    // إنشاء النجوم
+    function createStars() {
+        const container = document.getElementById('starContainer');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            container.appendChild(star);
+        }
+    }
+    createStars();
+
+    // تحميل مكتبة اليوتيوب
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '0', width: '0',
+            videoId: 'KtlgYxa6BMU', // معرف الفيديو
+            events: { 'onReady': onPlayerReady }
+        });
+    }
+
+    function onPlayerReady(event) {
+        // الفيديو جاهز لكن لن يعمل إلا بعد تفاعل المستخدم
+    }
+
+    function startExperience() {
+        player.playVideo(); // تشغيل الأغنية
+        nextPage(1, 2);
+    }
+
+    function nextPage(current, next) {
+        document.getElementById('page' + current).classList.remove('active-card');
+        document.getElementById('page' + next).classList.add('active-card');
+    }
+</script>
+
+</body>
+</html>
