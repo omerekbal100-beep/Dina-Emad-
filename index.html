@@ -6,41 +6,63 @@
     <title>يوم مميز</title>
     <style>
         :root { 
-            --bg-soft-cream: #fbfbf8; /* لون خلفية كريمي هادي جداً */
-            --card-white: rgba(255, 255, 255, 0.85); /* كارت أبيض شفاف */
-            --text-dark: #333333; /* لون نص أسود هادي */
-            --soft-gold: #bca13a; /* لون ذهبي هادي للزراير والتهنئة */
-            --star-white: rgba(255, 255, 255, 0.6); /* نجوم باهتة وخافتة */
+            --space-bg: linear-gradient(135deg, #f0f4f8 0%, #e5eef5 100%); /* خلفية سماوية ناعمة تشبه السديم */
+            --soft-blue: #a2d2ff; /* أزرق فاتح هادي جداً للزراير */
+            --text-dark: #2c3e50;
+            --star-color: rgba(255, 255, 255, 0.8);
         }
         
-        body { margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--bg-soft-cream); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; position: relative; }
-        
-        /* تأثير النجوم المتلألئة الخافتة */
-        .stars { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0; }
-        .star { position: absolute; background: var(--star-white); border-radius: 50%; animation: twinkle 4s infinite linear; }
-        @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.6); } 50% { opacity: 1; transform: scale(1); } }
+        body { 
+            margin: 0; padding: 0; height: 100vh; 
+            display: flex; justify-content: center; align-items: center; 
+            background: var(--space-bg); 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            overflow: hidden; position: relative; 
+        }
 
-        /* الجملة في الزاوية العلوية اليسرى */
-        .corner-text { position: absolute; top: 15px; left: 15px; font-size: 14px; color: var(--text-dark); font-weight: normal; z-index: 20; font-family: 'Courier New', Courier, monospace; /* خط يشبه الآلة الكاتبة وواضح */ }
+        /* تأثير المجرات والنجوم */
+        .galaxy-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0; }
+        .star { 
+            position: absolute; background: white; border-radius: 50%; 
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            animation: float 6s infinite ease-in-out; 
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-20px) translateX(10px); opacity: 0.8; }
+        }
 
-        .card { background: var(--card-white); padding: 45px 35px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); z-index: 10; width: 85%; max-width: 450px; text-align: center; border: 1px solid rgba(0,0,0,0.03); display: none; backdrop-filter: blur(5px); /* تأثير ضبابي خفيف وجميل */ }
-        .active-card { display: block; animation: fadeIn 1s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .corner-text { position: absolute; top: 20px; left: 20px; font-size: 13px; color: #555; z-index: 20; font-family: 'Courier New', monospace; letter-spacing: 1px; }
 
-        h1 { color: var(--text-dark); font-size: 24px; line-height: 1.6; margin-bottom: 30px; font-weight: 500; }
-        .celebrate-h1 { color: var(--soft-gold); font-weight: bold; }
+        .card { 
+            background: rgba(255, 255, 255, 0.7); 
+            padding: 50px 40px; border-radius: 40px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.03); 
+            z-index: 10; width: 85%; max-width: 420px; text-align: center; 
+            backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4);
+            display: none; 
+        }
+        .active-card { display: block; animation: fadeIn 1.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        button { padding: 14px 35px; font-size: 18px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: var(--soft-gold); color: white; margin-top: 25px; }
-        button:hover { background: #a68c33; transform: scale(1.02); }
+        h1 { color: var(--text-dark); font-size: 22px; line-height: 1.7; margin-bottom: 35px; font-weight: 400; }
+        .celebrate-h1 { color: #8eaddb; font-weight: bold; }
+
+        button { 
+            padding: 15px 40px; font-size: 17px; font-weight: 600; 
+            border: none; border-radius: 30px; cursor: pointer; 
+            transition: all 0.4s ease; background: var(--soft-blue); 
+            color: #fff; box-shadow: 0 8px 20px rgba(162, 210, 255, 0.3);
+        }
+        button:hover { background: #8ec7ff; transform: translateY(-3px); box-shadow: 0 12px 25px rgba(162, 210, 255, 0.4); }
 
         #player { display: none; }
     </style>
 </head>
 <body>
 
-<div class="stars" id="starContainer"></div>
+<div class="galaxy-container" id="galaxy"></div>
 <div id="player"></div>
-
 <div class="corner-text">You are my yellow person💛</div>
 
 <div class="card active-card" id="page1">
@@ -59,25 +81,27 @@
         <h1 class="celebrate-h1">كل سنه وانت طيبه يا دينا ❤️🥳 🥰</h1>
         <h1>و ربنا يجعلها سنه سعيدة عليكي يارب ♥️</h1>
         <h1>يارب اليوم يكون مميز و سعيد ليكي♥️</h1>
-        <p style="font-size: 18px; color: #666666;">وحابب أفكرك إن أنا موجود علشانك دايماً.</p>
+        <p style="font-size: 17px; color: #777;">وحابب أفكرك إن أنا موجود علشانك دايماً.</p>
     </div>
 </div>
 
 <script>
-    function createStars() {
-        const container = document.getElementById('starContainer');
-        for (let i = 0; i < 180; i++) {
+    function createGalaxy() {
+        const container = document.getElementById('galaxy');
+        for (let i = 0; i < 120; i++) {
             const star = document.createElement('div');
             star.className = 'star';
-            star.style.width = Math.random() * 2 + 'px'; /* نجوم أصغر وخافتة */
-            star.style.height = star.style.width;
+            const size = Math.random() * 4 + 'px';
+            star.style.width = size;
+            star.style.height = size;
             star.style.left = Math.random() * 100 + 'vw';
             star.style.top = Math.random() * 100 + 'vh';
-            star.style.animationDelay = Math.random() * 4 + 's';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            star.style.opacity = Math.random();
             container.appendChild(star);
         }
     }
-    createStars();
+    createGalaxy();
 
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
@@ -87,13 +111,12 @@
     var player;
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '0', width: '0',
-            videoId: 'yKNxeF4KMsY', 
+            height: '0', width: '0', videoId: 'yKNxeF4KMsY', 
             events: { 'onReady': onPlayerReady }
         });
     }
 
-    function onPlayerReady(event) { }
+    function onPlayerReady(event) {}
 
     function startExperience() {
         player.playVideo();
