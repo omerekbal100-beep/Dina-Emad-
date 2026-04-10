@@ -28,6 +28,15 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
+        /* تنسيق الترجمة في الخلفية */
+        #lyrics-container {
+            position: absolute; width: 100%; text-align: center;
+            bottom: 15%; color: white; font-size: 18px;
+            opacity: 0.4; z-index: 1; transition: opacity 1s;
+            font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            pointer-events: none;
+        }
+
         .corner-text { position: absolute; top: 20px; left: 20px; font-size: 13px; color: #fff; opacity: 0.6; z-index: 20; font-family: 'Courier New', monospace; }
 
         .card { 
@@ -35,7 +44,7 @@
             padding: 45px 35px; border-radius: 35px; 
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
             z-index: 10; width: 80%; max-width: 400px; text-align: center; 
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); /* دعم للأيفون */
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: none; 
         }
@@ -58,6 +67,7 @@
 
 <div class="stars-container" id="stars"></div>
 <div id="player"></div>
+<div id="lyrics-container"></div>
 <div class="corner-text">You are my yellow person💛</div>
 
 <div class="card active-card" id="page1">
@@ -81,7 +91,6 @@
 </div>
 
 <script>
-    // إنشاء النجوم
     function createStars() {
         const container = document.getElementById('stars');
         for (let i = 0; i < 100; i++) {
@@ -97,7 +106,18 @@
     }
     createStars();
 
-    // تحميل YouTube API
+    // كلمات الأغنية المترجمة بالتوقيت (بالثواني)
+    const lyrics = [
+        { time: 33, text: "انظري إلى النجوم.." },
+        { time: 36, text: "انظري كيف تشع لأجلكِ" },
+        { time: 42, text: "ولكل شيء تفعلينه" },
+        { time: 48, text: "نعم، لقد كانت كلها صفراء" },
+        { time: 54, text: "لقد جئتُ من أجلكِ" },
+        { time: 58, text: "وكتبتُ أغنية لأجلكِ" },
+        { time: 64, text: "ولكل الأشياء التي تقومين بها" },
+        { time: 70, text: "وكانت تسمى 'Yellow'" }
+    ];
+
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -107,32 +127,37 @@
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
             height: '0', width: '0', videoId: 'yKNxeF4KMsY',
-            playerVars: { 
-                'playsinline': 1, // مهم جداً للأيفون عشان الصوت ما يفتحش فيديو كامل الشاشة
-                'start': 33,
-                'enablejsapi': 1
-            },
+            playerVars: { 'playsinline': 1, 'start': 33, 'enablejsapi': 1 },
             events: { 'onReady': onPlayerReady }
         });
     }
 
-    function onPlayerReady(event) {
-        // الفيديو جاهز في الخلفية
-    }
+    function onPlayerReady(event) {}
 
-    // الدالة السحرية لتشغيل الصوت على الأيفون
     function startExperience() {
         if (player && typeof player.playVideo === 'function') {
             player.seekTo(33);
             player.playVideo();
-            // محاولة إضافية لضمان التشغيل في الأيفون في حالة تأخر الـ API
-            setTimeout(function() {
-                if (player.getPlayerState() !== 1) {
-                    player.playVideo();
-                }
-            }, 100);
+            updateLyrics(); // بدء تحديث الترجمة
         }
         nextPage(1, 2);
+    }
+
+    function updateLyrics() {
+        setInterval(() => {
+            const currentTime = player.getCurrentTime();
+            const currentLine = lyrics.find((line, index) => {
+                const nextLine = lyrics[index + 1];
+                return currentTime >= line.time && (!nextLine || currentTime < nextLine.time);
+            });
+            
+            if (currentLine) {
+                document.getElementById('lyrics-container').innerText = currentLine.text;
+                document.getElementById('lyrics-container').style.opacity = 0.5;
+            } else {
+                document.getElementById('lyrics-container').style.opacity = 0;
+            }
+        }, 500);
     }
 
     function nextPage(current, next) {
