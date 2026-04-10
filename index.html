@@ -28,13 +28,13 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* تنسيق الترجمة في الخلفية */
         #lyrics-container {
             position: absolute; width: 100%; text-align: center;
-            bottom: 15%; color: white; font-size: 18px;
-            opacity: 0.4; z-index: 1; transition: opacity 1s;
-            font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            bottom: 12%; color: white; font-size: 19px;
+            opacity: 0; z-index: 1; transition: opacity 0.8s, transform 0.8s;
+            font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.4);
             pointer-events: none;
+            padding: 0 20px; box-sizing: border-box;
         }
 
         .corner-text { position: absolute; top: 20px; left: 20px; font-size: 13px; color: #fff; opacity: 0.6; z-index: 20; font-family: 'Courier New', monospace; }
@@ -106,16 +106,23 @@
     }
     createStars();
 
-    // كلمات الأغنية المترجمة بالتوقيت (بالثواني)
+    // كلمات الأغنية الكاملة بالتوقيت
     const lyrics = [
         { time: 33, text: "انظري إلى النجوم.." },
         { time: 36, text: "انظري كيف تشع لأجلكِ" },
         { time: 42, text: "ولكل شيء تفعلينه" },
-        { time: 48, text: "نعم، لقد كانت كلها صفراء" },
+        { time: 48, text: "نعم، لقد كانت كلها صفراء (نوراً)" },
         { time: 54, text: "لقد جئتُ من أجلكِ" },
         { time: 58, text: "وكتبتُ أغنية لأجلكِ" },
         { time: 64, text: "ولكل الأشياء التي تقومين بها" },
-        { time: 70, text: "وكانت تسمى 'Yellow'" }
+        { time: 70, text: "وكانت تسمى 'Yellow'" },
+        { time: 76, text: "ثم حان دوري.." },
+        { time: 82, text: "يا للروعة التي تملكينها" },
+        { time: 90, text: "لأن كل ما تلمسينه.." },
+        { time: 96, text: "يتحول كله إلى نور (Yellow)" },
+        { time: 120, text: "انظري كيف تشع لأجلكِ" },
+        { time: 126, text: "انظري كيف تشع من أجلكِ.." },
+        { time: 133, text: "أنتِ الشخص المفضل لدي (My Yellow)" }
     ];
 
     var tag = document.createElement('script');
@@ -138,12 +145,13 @@
         if (player && typeof player.playVideo === 'function') {
             player.seekTo(33);
             player.playVideo();
-            updateLyrics(); // بدء تحديث الترجمة
+            updateLyrics();
         }
         nextPage(1, 2);
     }
 
     function updateLyrics() {
+        const lyricEl = document.getElementById('lyrics-container');
         setInterval(() => {
             const currentTime = player.getCurrentTime();
             const currentLine = lyrics.find((line, index) => {
@@ -151,11 +159,12 @@
                 return currentTime >= line.time && (!nextLine || currentTime < nextLine.time);
             });
             
-            if (currentLine) {
-                document.getElementById('lyrics-container').innerText = currentLine.text;
-                document.getElementById('lyrics-container').style.opacity = 0.5;
-            } else {
-                document.getElementById('lyrics-container').style.opacity = 0;
+            if (currentLine && lyricEl.innerText !== currentLine.text) {
+                lyricEl.style.opacity = 0;
+                setTimeout(() => {
+                    lyricEl.innerText = currentLine.text;
+                    lyricEl.style.opacity = 0.6;
+                }, 400);
             }
         }, 500);
     }
