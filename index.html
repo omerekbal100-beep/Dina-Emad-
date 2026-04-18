@@ -10,56 +10,24 @@
             --soft-blue: #48cae4; 
         }
         
-        body { 
-            margin: 0; padding: 0; height: 100vh; 
-            display: flex; justify-content: center; align-items: center; 
-            background: var(--space-bg); 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            overflow: hidden; position: relative;
-        }
+        body { margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: var(--space-bg); font-family: 'Segoe UI', sans-serif; overflow: hidden; position: relative; }
 
-        /* نجوم المجرة */
         .stars-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 0; }
-        .star { 
-            position: absolute; background: white; border-radius: 50%; 
-            animation: twinkle var(--d) infinite ease-in-out; 
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(0.8) translate3d(0,0,0); }
-            50% { opacity: 1; transform: scale(1.2) translate3d(0,0,0); }
-        }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--d) infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8) translate3d(0,0,0); } 50% { opacity: 1; transform: scale(1.2) translate3d(0,0,0); } }
 
-        /* الترجمة في الخلفية */
-        #lyrics-container {
-            position: absolute; width: 100%; text-align: center;
-            bottom: 12%; color: white; font-size: 19px;
-            opacity: 0; z-index: 1; transition: opacity 0.8s;
-            font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.4);
-            pointer-events: none; padding: 0 20px; box-sizing: border-box;
-        }
+        #lyrics-container { position: absolute; width: 100%; text-align: center; bottom: 12%; color: white; font-size: 19px; opacity: 0; z-index: 1; transition: opacity 0.8s; font-style: italic; text-shadow: 0 0 10px rgba(255,255,255,0.4); pointer-events: none; padding: 0 20px; box-sizing: border-box; }
 
         .corner-text { position: absolute; top: 20px; left: 20px; font-size: 13px; color: #fff; opacity: 0.6; z-index: 20; font-family: 'Courier New', monospace; }
 
-        .card { 
-            background: rgba(255, 255, 255, 0.08); 
-            padding: 45px 35px; border-radius: 35px; 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
-            z-index: 10; width: 80%; max-width: 400px; text-align: center; 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            display: none; 
-        }
+        .card { background: rgba(255, 255, 255, 0.08); padding: 45px 35px; border-radius: 35px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); z-index: 10; width: 80%; max-width: 400px; text-align: center; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); display: none; }
         .active-card { display: block; animation: fadeIn 0.8s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { color: #ffffff; font-size: 21px; line-height: 1.6; margin-bottom: 30px; font-weight: 400; }
+        h1 { color: #ffffff; font-size: 21px; line-height: 1.6; margin-bottom: 30px; }
         .celebrate-h1 { color: #ffd700; font-weight: bold; }
 
-        button { 
-            padding: 14px 40px; font-size: 17px; font-weight: 600; 
-            border: none; border-radius: 30px; cursor: pointer; 
-            background: var(--soft-blue); color: #020107; 
-        }
+        button { padding: 14px 40px; font-size: 17px; font-weight: 600; border: none; border-radius: 30px; cursor: pointer; background: var(--soft-blue); color: #020107; }
     </style>
 </head>
 <body>
@@ -69,7 +37,7 @@
 <div class="corner-text">You are my yellow person💛</div>
 
 <audio id="bgMusic" preload="auto">
-    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Chris_Zabriskie/Cylinders/Chris_Zabriskie_-_04_-_Cylinder_Four.mp3" type="audio/mpeg">
+    <source src="Coldplay - Yellow (Official Video)(M4A_128K).m4a" type="audio/mp4">
 </audio>
 
 <div class="card active-card" id="page1">
@@ -99,49 +67,4 @@
             const star = document.createElement('div');
             star.className = 'star';
             const size = (Math.random() * 2 + 1) + 'px';
-            star.style.width = size; star.style.height = size;
-            star.style.left = Math.random() * 100 + 'vw';
-            star.style.top = Math.random() * 100 + 'vh';
-            star.style.setProperty('--d', (Math.random() * 2 + 2) + 's');
-            container.appendChild(star);
-        }
-    }
-    createStars();
-
-    const audio = document.getElementById('bgMusic');
-    // ملاحظة: استبدل الرابط في الأعلى برابط MP3 المباشر لـ Yellow لضمان عملها
-    // سأقوم ببرمجة الترجمة لتعمل مع ملف الصوت المباشر
-    const lyrics = [
-        { time: 2, text: "انظري إلى النجوم.." },
-        { time: 5, text: "انظري كيف تشع لأجلكِ" },
-        { time: 10, text: "ولكل شيء تفعلينه" },
-        { time: 15, text: "أنتِ الشخص المفضل لدي (Yellow)" }
-    ];
-
-    function startExperience() {
-        // تشغيل الصوت فور لمس الزر (مسموح به في أيفون)
-        audio.play();
-        
-        audio.ontimeupdate = () => {
-            const currentLine = lyrics.find((line, index) => {
-                const nextLine = lyrics[index + 1];
-                return audio.currentTime >= line.time && (!nextLine || audio.currentTime < nextLine.time);
-            });
-            const lyricEl = document.getElementById('lyrics-container');
-            if (currentLine && lyricEl.innerText !== currentLine.text) {
-                lyricEl.innerText = currentLine.text;
-                lyricEl.style.opacity = 0.6;
-            }
-        };
-
-        nextPage(1, 2);
-    }
-
-    function nextPage(current, next) {
-        document.getElementById('page' + current).style.display = 'none';
-        document.getElementById('page' + next).classList.add('active-card');
-    }
-</script>
-
-</body>
-</html>
+            star.style.width = size; star.style.height
