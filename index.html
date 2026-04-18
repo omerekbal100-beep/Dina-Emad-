@@ -24,7 +24,7 @@
         .active-card { display: block; animation: fadeIn 0.8s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { color: #ffffff; font-size: 21px; line-height: 1.6; margin-bottom: 30px; }
+        h1 { color: #ffffff; font-size: 21px; line-height: 1.6; margin-bottom: 30px; font-weight: 400; }
         .celebrate-h1 { color: #ffd700; font-weight: bold; }
 
         button { padding: 14px 40px; font-size: 17px; font-weight: 600; border: none; border-radius: 30px; cursor: pointer; background: var(--soft-blue); color: #020107; }
@@ -67,4 +67,49 @@
             const star = document.createElement('div');
             star.className = 'star';
             const size = (Math.random() * 2 + 1) + 'px';
-            star.style.width = size; star.style.height
+            star.style.width = size; star.style.height = size;
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.setProperty('--d', (Math.random() * 2 + 2) + 's');
+            container.appendChild(star);
+        }
+    }
+    createStars();
+
+    const audio = document.getElementById('bgMusic');
+    const lyricEl = document.getElementById('lyrics-container');
+
+    // الترجمة بتبدأ مع الغناء
+    const lyrics = [
+        { time: 33, text: "انظري إلى النجوم.." },
+        { time: 36, text: "انظري كيف تشع لأجلكِ" },
+        { time: 42, text: "ولكل شيء تفعلينه" },
+        { time: 48, text: "نعم، لقد كانت كلها نوراً" },
+        { time: 133, text: "أنتِ الشخص المفضل لدي (Yellow)" }
+    ];
+
+    function startExperience() {
+        // تشغيل ملف الـ m4a مباشرة (مسموح به في الأيفون بعد لمس الزر)
+        audio.play().catch(e => console.log("Audio unlock failed"));
+        nextPage(1, 2);
+
+        audio.ontimeupdate = () => {
+            const currentLine = lyrics.find((line, index) => {
+                const nextLine = lyrics[index + 1];
+                return audio.currentTime >= line.time && (!nextLine || audio.currentTime < nextLine.time);
+            });
+            if (currentLine && lyricEl.innerText !== currentLine.text) {
+                lyricEl.innerText = currentLine.text;
+                lyricEl.style.opacity = 0.6;
+            }
+        };
+    }
+
+    function nextPage(current, next) {
+        document.getElementById('page' + current).style.display = 'none';
+        document.getElementById('page' + next).classList.add('active-card');
+    }
+</script>
+
+</body>
+</html>
