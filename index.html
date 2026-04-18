@@ -16,13 +16,14 @@
         .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--d) infinite ease-in-out; }
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8) translate3d(0,0,0); } 50% { opacity: 1; transform: scale(1.2) translate3d(0,0,0); } }
 
-        /* تنسيق الترجمة تحت الكارت */
+        /* مكان الترجمة تحت الكارت */
         #lyrics-container { 
-            position: fixed; bottom: 8%; width: 90%; text-align: center; 
+            position: fixed; bottom: 10%; width: 85%; text-align: center; 
             color: #fff; font-size: 18px; opacity: 0; z-index: 100; 
-            transition: opacity 0.6s ease; font-style: italic;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-            background: rgba(0,0,0,0.2); padding: 10px; border-radius: 15px;
+            transition: opacity 0.5s ease; font-style: italic;
+            text-shadow: 0 0 10px rgba(255,255,255,0.4);
+            background: rgba(0,0,0,0.3); padding: 12px; border-radius: 20px;
+            pointer-events: none;
         }
 
         .corner-text { position: absolute; top: 20px; left: 20px; font-size: 13px; color: #fff; opacity: 0.6; z-index: 20; font-family: 'Courier New', monospace; }
@@ -75,4 +76,57 @@
             star.className = 'star';
             const size = (Math.random() * 2 + 1) + 'px';
             star.style.width = size; star.style.height = size;
-            star.style.left
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.setProperty('--d', (Math.random() * 2 + 2) + 's');
+            container.appendChild(star);
+        }
+    }
+    createStars();
+
+    const audio = document.getElementById('bgMusic');
+    const lyricEl = document.getElementById('lyrics-container');
+
+    const lyrics = [
+        { time: 33, text: "انظري إلى النجوم.." },
+        { time: 37, text: "انظري كيف تشع لأجلكِ" },
+        { time: 42, text: "ولكل شيء تفعلينه" },
+        { time: 48, text: "نعم، لقد كانت كلها نوراً" },
+        { time: 54, text: "لقد جئتُ من أجلكِ" },
+        { time: 60, text: "وكتبتُ أغنية لأجلكِ" },
+        { time: 70, text: "وكانت تُسمى 'Yellow'" },
+        { time: 133, text: "أنتِ الشخص المفضل لدي 💛" }
+    ];
+
+    function startExperience() {
+        // البدء من الثانية 33 للأيفون
+        audio.currentTime = 33;
+        audio.play().then(() => {
+            console.log("Playing...");
+        }).catch(e => {
+            // محاولة ثانية لو فشل (للأيفون)
+            audio.play();
+        });
+        
+        nextPage(1, 2);
+
+        audio.ontimeupdate = () => {
+            const currentLine = lyrics.find((line, index) => {
+                const nextLine = lyrics[index + 1];
+                return audio.currentTime >= line.time && (!nextLine || audio.currentTime < nextLine.time);
+            });
+            if (currentLine && lyricEl.innerText !== currentLine.text) {
+                lyricEl.innerText = currentLine.text;
+                lyricEl.style.opacity = 1;
+            }
+        };
+    }
+
+    function nextPage(current, next) {
+        document.getElementById('page' + current).style.display = 'none';
+        document.getElementById('page' + next).classList.add('active-card');
+    }
+</script>
+
+</body>
+</html>
